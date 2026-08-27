@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration - Émargement Club</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:30px}.container{max-width:1000px;margin:auto;background:#fff;padding:30px;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,.1)}
+h1{text-align:center}.actions{text-align:right;margin-bottom:20px}.actions a{display:inline-block;padding:10px 14px;background:#0078d4;color:#fff;text-decoration:none;border-radius:5px}
+canvas{max-height:450px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Statistiques</h1>
+<div class="actions"><a href="/api/export/presences.csv">Exporter les présences CSV</a></div>
+<canvas id="chart"></canvas>
+</div>
+<script>
+fetch('/api/stats')
+.then(r=>r.json())
+.then(data=>{
+  new Chart(document.getElementById('chart'),{
+    type:'bar',
+    data:{labels:Object.keys(data),datasets:[{label:'Présences',data:Object.values(data)}]},
+    options:{responsive:true,maintainAspectRatio:false}
+  });
+})
+.catch(()=>{document.querySelector('.container').insertAdjacentHTML('beforeend','<p>Impossible de charger les statistiques.</p>')});
+</script>
+</body>
+</html>

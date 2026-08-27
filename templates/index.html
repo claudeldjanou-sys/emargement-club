@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Émargement Club</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .datetime {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005ea6;
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Feuille d'Émargement</h1>
+
+    <div class="datetime">
+        {{ datetime }}
+    </div>
+
+    <form id="emargementForm">
+
+        <input
+            type="text"
+            name="nom"
+            placeholder="Nom"
+            required>
+
+        <input
+            type="text"
+            name="prenom"
+            placeholder="Prénom"
+            required>
+
+        <input
+            type="text"
+            name="telephone"
+            placeholder="Téléphone"
+            required>
+
+        <input
+            type="text"
+            name="equipe"
+            placeholder="Équipe"
+            required>
+
+        <select name="qualite" required>
+            <option value="">Sélectionner...</option>
+            <option value="Membre">Membre</option>
+            <option value="Responsable">Responsable</option>
+            <option value="Invité">Invité</option>
+        </select>
+
+        <button type="submit">
+            Enregistrer la présence
+        </button>
+
+    </form>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+
+document
+.getElementById("emargementForm")
+.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const response = await fetch(
+        "/api/emarger",
+        {
+            method: "POST",
+            body: formData
+        }
+    );
+
+    const data = await response.json();
+
+    const message =
+        document.getElementById("message");
+
+    if(response.ok) {
+
+        message.style.color = "green";
+        message.innerText = data.message;
+
+        this.reset();
+
+    } else {
+
+        message.style.color = "red";
+        message.innerText =
+            data.message ||
+            "Erreur lors de l'enregistrement";
+    }
+});
+
+</script>
+
+</body>
+</html>
