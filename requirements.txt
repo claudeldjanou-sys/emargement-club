@@ -1,6 +1,7 @@
 fastapi
-uvicorn[standard]
+uvicorn
+sqlalchemy
+psycopg2-binary
+pandas
 jinja2
 python-multipart
-SQLAlchemy>=2.0,<3.0
-psycopg2-binary>=2.9,<3.0
